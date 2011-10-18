@@ -121,7 +121,7 @@ if [[ -x /run/initramfs/shutdown ]]; then
 else
 
 	status "Remounting Root Filesystem Read-only" \
-	mount -n -o remount,ro /
+		mount -n -o remount,ro /
 
 	# Power off or reboot
 	printsep

@@ -370,7 +370,7 @@ activate_vgs() {
 # Newer packages will only have /sbin/cryptsetup and no static binary
 # This ensures maximal compatibility with the old and new layout
 for CS in /sbin/cryptsetup /usr/sbin/cryptsetup \
-	/sbin/cryptsetup.static ''; do
+		/sbin/cryptsetup.static ''; do
 	[[ -x $CS ]] && break
 done
 
