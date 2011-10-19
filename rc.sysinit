@@ -225,6 +225,9 @@ RANDOM_SEED=/var/lib/misc/random-seed
 # Remove leftover files
 remove_leftover
 
+if [[ -s /etc/hostname ]]; then
+	HOSTNAME=$(< /etc/hostname)
+fi
 if [[ $HOSTNAME ]]; then
 	stat_busy "Setting Hostname: $HOSTNAME"
 	echo "$HOSTNAME" >| /proc/sys/kernel/hostname && stat_done || stat_fail
