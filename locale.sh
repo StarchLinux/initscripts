@@ -67,6 +67,12 @@ else
 fi
 
 if [ -n "$LC_TELEPHONE" ]; then
+	export LC_TELEPHONE
+else
+	unset LC_TELEPHONE
+fi
+
+if [ -n "$LC_MEASUREMENT" ]; then
 	export LC_MEASUREMENT
 else
 	unset LC_MEASUREMENT
