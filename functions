@@ -418,7 +418,6 @@ NETFS="nfs,nfs4,smbfs,cifs,codafs,ncpfs,shfs,fuse,fuseblk,glusterfs,davfs,fuse.g
 # Check local filesystems
 fsck_all() {
 	fsck -A -T -C"$FSCK_FD" -a -t "no${NETFS//,/,no},noopts=_netdev" $FORCEFSCK
-	return $?
 }
 
 # Single-user login and/or automatic reboot after fsck (if needed)
