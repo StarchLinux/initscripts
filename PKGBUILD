@@ -1,5 +1,5 @@
 pkgname=initscripts-git
-pkgver=$(date +%s)
+pkgver=$(date +%Y%m%d)
 pkgrel=$(git log -1 --pretty=format:%h)
 pkgdesc="System initialization/bootup scripts"
 arch=('any')
