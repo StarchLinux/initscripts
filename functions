@@ -5,6 +5,10 @@
 # sanitize PATH (will be overridden later when /etc/profile is sourced, but is useful for UDev)
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
+localevars=(LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY
+            LC_MESSAGES LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE
+            LC_MEASUREMENT LC_IDENTIFICATION LC_ALL)
+
 if [[ $1 == "start" ]]; then
 	if [[ $STARTING ]]; then
 		echo "A daemon is starting another daemon, this is unlikely to work as intended."
@@ -64,17 +68,14 @@ unset TERM_COLORS
 unset TZ
 
 # sanitize the locale settins
-unset LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY \
-      LC_MESSAGES LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE \
-      LC_MEASUREMENT LC_IDENTIFICATION LC_ALL
+unset "${localevars[@]}"
+
 if [[ $DAEMON_LOCALE = [yY][eE][sS] ]]; then
-	LANG="${LOCALE:=C}"
-	if [ -r /etc/locale.conf ]; then
+	LANG=${LOCALE:-C}
+	if [[ -r /etc/locale.conf ]]; then
 		. /etc/locale.conf
 	fi
-	export LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY \
-      LC_MESSAGES LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE \
-      LC_MEASUREMENT LC_IDENTIFICATION LC_ALL
+	export "${localevars[@]}"
 else
 	export LANG=C
 fi
