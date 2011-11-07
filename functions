@@ -9,6 +9,8 @@ localevars=(LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY
             LC_MESSAGES LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE
             LC_MEASUREMENT LC_IDENTIFICATION LC_ALL)
 
+vconsolevars=(KEYMAP KEYMAP_TOGGLE FONT FONT_MAP FONT_UNIMAP)
+
 if [[ $1 == "start" ]]; then
 	if [[ $STARTING ]]; then
 		echo "A daemon is starting another daemon, this is unlikely to work as intended."
@@ -70,12 +72,56 @@ unset TZ
 # sanitize the locale settins
 unset "${localevars[@]}"
 
+parse_envfile() {
+	local file=$1 validkeys=${@:2} ret=0 lineno=0 key= val=
+
+	if [[ -z $file ]]; then
+		printf "error: no environment file specified\n"
+		return 1
+	fi
+
+	if [[ ! -f $file ]]; then
+		printf "error: cannot parse \`%s': No such file or directory\n" "$file"
+		return 1
+	fi
+
+	if [[ ! -r $file ]]; then
+		printf "error: cannot read \`%s': Permission denied\n" "$file"
+		return 1
+	fi
+
+	while IFS='=' read -r key val; do
+		(( ++lineno ))
+
+		# trim whitespace, avoiding usage of a tempfile
+		key=$(echo "$1" | { read -r val; echo "$val"; })
+		val=$(echo "$1" | { read -r val; echo "$val"; })
+
+		[[ $key ]] || continue
+
+		if [[ -z $val ]]; then
+			printf "error: found key \`%s' without value on line %s of %s\n" \
+					"$key" "$lineno" "$file"
+			(( ++ret ))
+			continue
+		fi
+
+		# ignore invalid keys if we have a list of valid ones
+		if (( ${#validkeys[*]} )); then
+			in_array "$key" "${validkeys[@]}" || continue
+		fi
+
+		export "$key=$val" || (( ++ret ))
+	done <"$file"
+
+	return $ret
+}
+
 if [[ $DAEMON_LOCALE = [yY][eE][sS] ]]; then
 	LANG=${LOCALE:-C}
 	if [[ -r /etc/locale.conf ]]; then
-		. /etc/locale.conf
+		parse_envfile /etc/locale.conf "${localevars[@]}"
 	fi
-	export "${localevars[@]}"
 else
 	export LANG=C
 fi

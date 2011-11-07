@@ -237,7 +237,7 @@ if [[ $HOSTNAME ]]; then
 fi
 
 if [[ -s /etc/locale.conf ]]; then
-	. /etc/locale.conf
+	parse_envfile /etc/locale.conf "LANG"
 	[[ $LANG ]] && LOCALE=$LANG
 fi
 if [[ ${LOCALE,,} =~ utf ]]; then
@@ -263,7 +263,7 @@ else
 fi
 
 if [[ -s /etc/vconsole.conf ]]; then
-	. /etc/vconsole.conf
+	parse_envfile /etc/vconsole.conf "${vconsolevars[@]}"
 	[[ $FONT ]] && CONSOLEFONT=$FONT
 	[[ $FONT_MAP ]] && CONSOLEMAP=$FONT_MAP
 fi
