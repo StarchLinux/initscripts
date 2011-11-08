@@ -73,7 +73,8 @@ unset TZ
 unset "${localevars[@]}"
 
 parse_envfile() {
-	local file=$1 validkeys=${@:2} ret=0 lineno=0 key= val=
+	local file=$1 validkeys=("${@:2}") ret=0 lineno=0 key= val=
+	local -r quotes=$'[\'"]' comments=$'[;#]*'
 
 	if [[ -z $file ]]; then
 		printf "error: no environment file specified\n"
@@ -94,10 +95,14 @@ parse_envfile() {
 		(( ++lineno ))
 
 		# trim whitespace, avoiding usage of a tempfile
-		key=$(echo "$1" | { read -r val; echo "$val"; })
-		val=$(echo "$1" | { read -r val; echo "$val"; })
+		key=$(echo "$key" | { read -r key; echo "$key"; })
 
-		[[ $key ]] || continue
+		# key must exist and line must not be a comment
+		[[ -z $key || ${key:0:1} = $comments ]] && continue
+
+		# trim whitespace, strip matching quotes
+		val=$(echo "$val" | { read -r val; echo "$val"; })
+		[[ ${val:0:1} = $quotes && ${val:(-1)} = "${val:0:1}" ]] && val=${val:1:(-1)}
 
 		if [[ -z $val ]]; then
 			printf "error: found key \`%s' without value on line %s of %s\n" \
@@ -107,8 +112,8 @@ parse_envfile() {
 		fi
 
 		# ignore invalid keys if we have a list of valid ones
-		if (( ${#validkeys[*]} )); then
-			in_array "$key" "${validkeys[@]}" || continue
+		if (( ${#validkeys[*]} )) && ! in_array "$key" "${validkeys[@]}"; then
+			continue
 		fi
 
 		export "$key=$val" || (( ++ret ))
