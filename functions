@@ -122,47 +122,6 @@ parse_envfile() {
 	return $ret
 }
 
-if [[ $DAEMON_LOCALE = [yY][eE][sS] ]]; then
-	LANG=${LOCALE:-C}
-	if [[ -r /etc/locale.conf ]]; then
-		parse_envfile /etc/locale.conf "${localevars[@]}"
-	fi
-else
-	export LANG=C
-fi
-
-# set colors
-if [[ $USECOLOR = [yY][eE][sS] ]]; then
-	if tput setaf 0 &>/dev/null; then
-		C_CLEAR=$(tput sgr0)                      # clear text
-		C_MAIN=${C_CLEAR}$(tput bold)        # main text
-		C_OTHER=${C_MAIN}$(tput setaf 4)     # prefix & brackets
-		C_SEPARATOR=${C_MAIN}$(tput setaf 0) # separator
-		C_BUSY=${C_CLEAR}$(tput setaf 6)     # busy
-		C_FAIL=${C_MAIN}$(tput setaf 1)      # failed
-		C_DONE=${C_MAIN}                          # completed
-		C_BKGD=${C_MAIN}$(tput setaf 5)      # backgrounded
-		C_H1=${C_MAIN}                            # highlight text 1
-		C_H2=${C_MAIN}$(tput setaf 6)        # highlight text 2
-	else
-		C_CLEAR="\e[m"          # clear text
-		C_MAIN="\e[;1m"         # main text
-		C_OTHER="\e[1;34m"      # prefix & brackets
-		C_SEPARATOR="\e[1;30m"  # separator
-		C_BUSY="\e[;36m"        # busy
-		C_FAIL="\e[1;31m"       # failed
-		C_DONE=${C_MAIN}        # completed
-		C_BKGD="\e[1;35m"       # backgrounded
-		C_H1=${C_MAIN}          # highlight text 1
-		C_H2="\e[1;36m"         # highlight text 2
-	fi
-fi
-
-# prefixes:
-
-PREFIX_REG="::"
-PREFIX_HL=" >"
-
 # functions:
 
 deltext() {
@@ -640,6 +599,47 @@ EOF
 		stat_done
 	fi
 }
+
+if [[ $DAEMON_LOCALE = [yY][eE][sS] ]]; then
+	LANG=${LOCALE:-C}
+	if [[ -r /etc/locale.conf ]]; then
+		parse_envfile /etc/locale.conf "${localevars[@]}"
+	fi
+else
+	export LANG=C
+fi
+
+# set colors
+if [[ $USECOLOR = [yY][eE][sS] ]]; then
+	if tput setaf 0 &>/dev/null; then
+		C_CLEAR=$(tput sgr0)                      # clear text
+		C_MAIN=${C_CLEAR}$(tput bold)        # main text
+		C_OTHER=${C_MAIN}$(tput setaf 4)     # prefix & brackets
+		C_SEPARATOR=${C_MAIN}$(tput setaf 0) # separator
+		C_BUSY=${C_CLEAR}$(tput setaf 6)     # busy
+		C_FAIL=${C_MAIN}$(tput setaf 1)      # failed
+		C_DONE=${C_MAIN}                          # completed
+		C_BKGD=${C_MAIN}$(tput setaf 5)      # backgrounded
+		C_H1=${C_MAIN}                            # highlight text 1
+		C_H2=${C_MAIN}$(tput setaf 6)        # highlight text 2
+	else
+		C_CLEAR="\e[m"          # clear text
+		C_MAIN="\e[;1m"         # main text
+		C_OTHER="\e[1;34m"      # prefix & brackets
+		C_SEPARATOR="\e[1;30m"  # separator
+		C_BUSY="\e[;36m"        # busy
+		C_FAIL="\e[1;31m"       # failed
+		C_DONE=${C_MAIN}        # completed
+		C_BKGD="\e[1;35m"       # backgrounded
+		C_H1=${C_MAIN}          # highlight text 1
+		C_H2="\e[1;36m"         # highlight text 2
+	fi
+fi
+
+# prefixes:
+
+PREFIX_REG="::"
+PREFIX_HL=" >"
 
 # Source additional functions at the end to allow overrides
 for f in /etc/rc.d/functions.d/*; do
