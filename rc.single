@@ -18,9 +18,6 @@ if [[ $PREVLEVEL != N ]]; then
 
 	run_hook single_postkillall
 
-	# start up our mini logger until syslog takes over
-	minilogd
-
 	# Start/trigger UDev, load MODULES and settle UDev
 	udevd_modprobe single
 	
