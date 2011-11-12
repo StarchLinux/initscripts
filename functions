@@ -590,11 +590,6 @@ set_consolefont() {
 		done
 	if (( $? )); then
 		stat_fail
-	elif [[ $CONSOLEMAP ]]; then
-		cat <<"EOF" >>/etc/profile.d/locale.sh
-if [ "$CONSOLE" = "" -a "$TERM" = "linux" -a -t 1 ]; then printf "\033(K"; fi
-EOF
-		stat_done
 	else
 		stat_done
 	fi
