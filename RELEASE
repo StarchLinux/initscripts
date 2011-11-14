@@ -5,39 +5,35 @@ Releasing
 
 	$ git tag -a 2011.04.1
 
-2) create a tarball
+2) create a tarball and push it to gerolde and pkgbuild.com (needs 4.3.2 to be done...(
 
 	$ make release
 
-3) copy the tarball to gerolde
+3) check that the PKGBUILD in git is in sync with the PKGBUILD to be released
 
-	$ scp initscripts-YYYY.MM.X.tar.xz gerolde.archlinux.org:/srv/ftp/other/initscripts/
+4) create package and push to testing:
 
-4) check that the PKGBUILD in git is in sync with the PKGBUILD to be released
+  4.1) [first time only] set up ssh forwarding so you can connect to gerolde from alderaan
 
-5) create package and push to testing:
+    4.1.1) Add "ForwardAgent=yes" to ~/.ssh/config
 
-  5.1) [first time only] set up ssh forwarding so you can connect to gerolde from alderaan
+    4.1.2) Add your private key to the authentication agent "ssh-add"
 
-    5.1.1) Add "ForwardAgent=yes" to ~/.ssh/config
+  4.2) ssh pkgbuild.com
 
-    5.1.2) Add your private key to the authentication agent "ssh-add"
+  4.3) [first time only] check out initscripts from svn
 
-  5.2) ssh pkgbuild.com
+    4.3.1) svn checkout -N svn+ssh://gerolde.archlinux.org/srv/svn-packages
 
-  5.3) [first time only] check out initscripts from svn
+    4.3.2) "cd svn-packages && svn update initscripts"
 
-    5.3.1) svn checkout -N svn+ssh://gerolde.archlinux.org/srv/svn-packages
+  4.4) get the latest version of initscripts: "cd svn-packages && svn update"
 
-    5.3.2) "cd svn-packages && svn update initscripts"
+  4.5) update the version field in the PKGBUILD
 
-  5.4) get the latest version of initscripts: "cd svn-packages && svn update"
+  4.6) build the package for both arches: "sudo testing-{i686,x86_64}-build"
 
-  5.5) update the version field in the PKGBUILD
+  4.7) run checkpkg, namcap, and install test at least one of the two packages
 
-  5.6) build the package for both arches: "sudo testing-{i686,x86_64}-build"
-
-  5.7) run checkpkg, namcap, and install test at least one of the two packages
-
-  5.8) commit to svn and move package to your staging folder (which needs to exist on gerolde):
+  4.8) commit to svn and move package to your staging folder (which needs to exist on gerolde):
        'testingpkg "commit message"'
