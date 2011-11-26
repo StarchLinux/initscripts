@@ -498,7 +498,7 @@ umount_all() {
 		fi
 
 		mounts+=("$target")
-	done < <(findmnt -runRo TARGET,FSTYPE,OPTIONS / | tac)
+	done < <(findmnt -mrunRo TARGET,FSTYPE,OPTIONS / | tac)
 
 	umount -r "${mounts[@]}"
 
