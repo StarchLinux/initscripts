@@ -50,6 +50,8 @@ kill_all
 
 run_hook shutdown_postkillall
 
+run_hook shutdown_preumount
+
 # unmount any non-api partitions that are backed by swap, we don't want to
 # move their contents into memory (waste of time and might caues OOM).
 status "Unmounting Swap-backed Filesystems" umount_all "tmpfs"

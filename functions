@@ -555,6 +555,7 @@ bootlogd_stop() {
 # single_prekillall: before all processes are being killed in rc.single
 # shutdown_postkillall: after all processes have been killed in rc.shutdown
 # single_postkillall: after all processes have been killed in rc.single
+# shutdown_preumount: after last filesystem write, but before filesystems are unmounted
 # shutdown_postumount: after filesystems are unmounted
 # shutdown_poweroff: directly before powering off in rc.shutdown
 #
