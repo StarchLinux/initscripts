@@ -506,13 +506,16 @@ umount_all() {
 
 remove_leftover() {
 	stat_busy "Removing Leftover Files"
-		# handle this separately until we declare the non-symlinks obsoleted
-		[[ ! -L /var/lock ]] && rm -rf /var/lock/*
-		if [[ ! -L /var/run && -d /var/run ]]; then
-			find /var/run/ \! -type d -delete
-			ln -s /run/daemons /var/run/daemons
-		fi
 		/usr/lib/initscripts/arch-tmpfiles --create --remove && stat_done || stat_fail
+		# move from static /var/{run,lock} to /run
+		if [[ ! -L /var/lock ]]; then
+			rm -rf /var/lock
+			ln -s /run/lock /var/lock
+		fi
+		if [[ ! -L /var/run ]]; then
+			rm -rf /var/run
+			ln -s /run /var/run
+		fi
 }
 
 bootlogd_stop() {
