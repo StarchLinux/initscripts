@@ -604,7 +604,7 @@ set_consolefont() {
 }
 
 if [[ $DAEMON_LOCALE = [yY][eE][sS] ]]; then
-	LANG=${LOCALE:-C}
+	export LANG=${LOCALE:-C}
 	if [[ -r /etc/locale.conf ]]; then
 		parse_envfile /etc/locale.conf "${localevars[@]}"
 	fi
