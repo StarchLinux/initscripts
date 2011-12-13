@@ -195,8 +195,8 @@ run_hook sysinit_postfsck
 # Single-user login and/or automatic reboot if needed
 fsck_reboot $fsckret
 
-status "Remounting Root Read/Write" \
-	mount -n -o remount,rw /
+status "Remounting Root" \
+	mount -n -o remount /
 
 # force linkage of /etc/mtab to the kernel
 [[ -L /etc/mtab ]] || ln -sf /proc/self/mounts /etc/mtab
