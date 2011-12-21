@@ -40,6 +40,10 @@ if [[ ! -a /usr/lib ]] ; then
   printf "${C_FAIL}/usr is not mounted. This is not supported.${C_OTHER}\n"
 fi
 
+if [[ ! $(grep devtmpfs /proc/filesystems) ]] ; then
+	printf "${C_FAIL}Your kernel does not have devtmpfs support. This is not supported.${C_OTHER}\n"
+fi
+
 HWCLOCK_PARAMS="--systz"
 case $HARDWARECLOCK in
 	"") ;;
