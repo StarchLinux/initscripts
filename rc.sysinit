@@ -198,9 +198,6 @@ fsck_reboot $fsckret
 status "Remounting Root" \
 	mount -n -o remount /
 
-# force linkage of /etc/mtab to the kernel
-[[ -L /etc/mtab ]] || ln -sf /proc/self/mounts /etc/mtab
-
 # now mount all the local filesystems
 run_hook sysinit_premount
 status "Mounting Local Filesystems" \
