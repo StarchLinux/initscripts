@@ -25,12 +25,12 @@ checkparams() {
 	fi
 
 	# uid must be numeric or a valid user name
-	if [[ $uid && $uid != +([[:digit:]]) ]] && ! getent passwd "$uid" >/dev/null; then
+	if [[ $uid ]] && ! getent passwd "$uid" >/dev/null; then
 		return 1
 	fi
 
 	# gid must be numeric or a valid group name
-	if [[ $gid && $gid != +([[:digit:]]) ]] && ! getent group "$gid" >/dev/null; then
+	if [[ $gid ]] && ! getent group "$gid" >/dev/null; then
 		return 1
 	fi
 
