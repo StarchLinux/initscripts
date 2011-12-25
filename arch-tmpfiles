@@ -242,7 +242,7 @@ while read -d '' fragment; do
 		[[ ${line[3]} = '-' ]] && line[3]=0
 		[[ ${line[4]} = '-' ]] && line[4]=0
 
-		_${line[0]} "${line[@]:1}"
+		"_${line[@]}"
 	done <"$FILE"
 done < <(printf '%s\0' "${!fragments[@]}" | sort -z)
 
