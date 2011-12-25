@@ -51,7 +51,7 @@ network_up() {
 network_down() {
 	have_interface "$interface" || return 1
 
-	if [[ -f /var/run/dhcpcd-$interface.pid ]]; then
+	if [[ -f /run/dhcpcd-$interface.pid ]]; then
 		dhcpcd -k $interface || return 1
 	else
 		ip addr flush dev $interface || return 1
@@ -81,8 +81,8 @@ ifup() {
 
 	if [[ $ifcfg = dhcp ]]; then
 		# remove the .pid file if it exists
-		rm -f /var/run/dhcpcd-${1}.pid >/dev/null 2>&1
-		rm -f /var/run/dhcpcd-${1}.cache >/dev/null 2>&1
+		rm -f /run/dhcpcd-${1}.pid >/dev/null 2>&1
+		rm -f /run/dhcpcd-${1}.cache >/dev/null 2>&1
 		dhcpcd $DHCPCD_ARGS ${1}
 	else
 		ifconfig $ifcfg
@@ -114,7 +114,7 @@ ifdown() {
 		return 1
 	fi
 
-	if [[ $ifcfg = dhcp && -f /var/run/dhcpcd-${1}.pid ]]; then
+	if [[ $ifcfg = dhcp && -f /run/dhcpcd-${1}.pid ]]; then
 		dhcpcd -k ${1} >/dev/null 2>&1
 	fi
 	# Always bring the interface itself down
