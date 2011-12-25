@@ -1,0 +1,167 @@
+/////
+vim:set ts=4 sw=4 syntax=asciidoc noet:
+/////
+rc.conf(5)
+==========
+
+Name
+----
+rc.conf - Arch Linux main configuration file
+
+Synopsis
+--------
+*/etc/rc.conf*
+
+Description
+-----------
+The */etc/rc.conf* file is the system configuration file for Arch-specific
+settings. The format is bash. It contains several commonly-edited settings such
+as timezone; keymap; kernel modules; daemons to load at start-up; etc. It's
+split up in a few sections to categorize configuration settings: localization,
+hardware, networking and daemons.
+
+Localization[[L]]
+-----------------
+*LOCALE*::
+	This sets your system language, which will be used by all i18n-friendly applications and utilities.
+	See `locale -a` (or locale.gen) for available options. 	LANG in /etc/locale.conf takes precedence.
+	Default: "en_US.UTF-8"
+
+*DAEMON_LOCALE*::
+	If set to 'yes', use $LOCALE as the locale during daemon startup and during the boot process.
+	If set to 'no', the C locale is used.
+	Default: "no"
+
+*HARDWARECLOCK*::
+	How to interpret/update the hardware clock. (used by hwclock)
+	Options:
+	    - "": fall back to the value in /var/lib/hwclock/adjfile.
+	    - "UTC": most robust, allows operating systems to abstract local time and ease DST. (recommended)
+	    - "localtime": apply timezone (and DST) in hardwareclock: discouraged.
+	      Choose this if you dualboot with an OS which cannot handle UTC BIOS times correctly, like Windows.
+	    - any other value will result in the hardware clock being left untouched (useful for virtualization)
+	Default: "UTC"
+
+*TIMEZONE*::
+	Specifies your time zone. Possible time zones are the relative path to a zoneinfo file starting
+	from the directory /usr/share/zoneinfo. For example, a German timezone would be Europe/Berlin,
+	which refers to the file /usr/share/zoneinfo/Europe/Berlin.
+	Note: if unset, the value in /etc/localtime is used unchanged
+	Default: "Canada/Pacific"
+
+*KEYMAP*::
+	Defines the keymap to load with the loadkeys program on bootup.
+	Possible keymaps are found in /usr/share/kbd/keymaps. Please note that this
+	setting is only valid for your TTYs, not any graphical window managers or X!
+	Defalut: "us"
+
+*CONSOLEFONT*::
+	Defines the console font to load with the setfont program on bootup.
+	Possible fonts are found in /usr/share/kbd/consolefonts. (only needed for non-US)
+	Default: empty
+
+*CONSOLEMAP*::
+	Defines the console map to load with the setfont program on bootup.
+	Possible maps are found in /usr/share/kbd/consoletrans.
+	Set this to a map suitable for the appropriate locale (8859-1 for Latin1, for example)
+	if you're using an UTF-8 locale and use programs that generate 8-bit output.
+	If you're using X11 for everyday work, don't bother,
+	as it only affects the output of Linux console applications.
+	Default: empty
+
+*USECOLOR*::
+	use ANSI color sequences in startup messages
+	Default: "yes"
+
+Hardware[[H]]
+-------------
+
+*MODULES*::
+	Modules to load at boot-up.  To blacklist modules, see "man modprobe.conf".
+	Default: ().
+
+*UDEV_TIMEOUT*::
+	Udev settle timeout.
+	Default: 30
+
+*USEDMRAID*::
+	Scan for FakeRAID (dmraid) Volumes at startup.
+	Default: "no"
+
+*USEBTRFS*::
+	Scan for BTRFS volumes at startup.
+	Default: "no"
+
+*USELVM*::
+	Scan for LVM volume groups at startup, required if you use LVM.
+	Default: "no"
+
+Networking[[N]]
+---------------
+
+*HOSTNAME*::
+	Hostname of machine. Should also be put in /etc/hosts.
+	Default: "myhost"
+
+The following settings help you setting up a wired network.
+
+*interface*::
+	Name of device.
+	Default: empty
+	Required for manual configuration as well as DHCP.
+	Use 'ip addr' or 'ls /sys/class/net/' to see all available interfaces.
+
+*address*::
+	IP address.
+	Default: empty
+	Required for manual configuration, empty for DHCP.
+
+*netmask*::
+	Subnet mask.
+	Default: empty (which means 255.255.255.0)
+	Optional for manual configuration, ignored for DHCP.
+
+*broadcast*::
+	Broadcast address.
+	Default: empty
+	Optional for manual configuration, ignored for DHCP.
+
+*gateway*::
+	Default route.
+	Default: empty
+	Required for manual configuration, ignored for DHCP.
+
+
+*NETWORK_PERSIST*::
+	Setting this to "yes" will skip network shutdown.
+	This is required if your root device is on NFS.
+	Default: "no"
+
+*NETWORKS*::
+	Enable these netcfg profiles at boot-up. These are useful if you happen to
+	need more advanced network features than the simple network service
+	supports, such as multiple network configurations (ie, laptop users)
+	   - set to 'menu' to present a menu during boot-up (dialog package required)
+	   - prefix an entry with a ! to disable it
+	Network profiles are found in /etc/network.d
+	This requires the netcfg package
+	Default: (main), (commented out).
+
+Daemons[[D]]
+------------
+*DAEMONS*::
+	Daemons to start at boot-up (in this order)
+	   - prefix a daemon with a ! to disable it
+	   - prefix a daemon with a @ to start it up in the background
+
+	If you are sure nothing else touches your hardware clock (such as ntpd or
+	a dual-boot), you might want to enable 'hwclock'. Note that this will only
+	make a difference if the hwclock program has been calibrated correctly.
+
+	If you use a network filesystem you should enable 'netfs'.
+
+	Default: (syslog-ng network crond)
+
+Authors
+-------
+	Written by Dieter Plaetinck and others.
