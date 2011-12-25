@@ -93,7 +93,7 @@ _D() {
 	fi
 
 	if [[ -d $path ]] && (( REMOVE )); then
-		find "$path" -mindepth 1 -maxdepth 1 -xdev -print0 | xargs -r0 rm -rf
+		find "$path" -mindepth 1 -maxdepth 1 -xdev -exec rm -rf {} +
 	fi
 
 	if (( CREATE )); then
