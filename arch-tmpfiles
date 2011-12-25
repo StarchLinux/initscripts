@@ -37,6 +37,24 @@ checkparams() {
 	return 0
 }
 
+relabel() {
+	local -a paths=($1)
+	local mode=$2 uid=$3 gid=$4
+
+	if ! checkparams 4 "$@"; then
+		warninvalid
+		return
+	fi
+
+	for path in "${paths[@]}"; do
+		if [[ -e $path ]]; then
+			[[ $uid != '-' ]] && chown $CHOPTS "$uid" "$path"
+			[[ $gid != '-' ]] && chgrp $CHOPTS "$gid" "$path"
+			[[ $mode != '-' ]] && chmod $CHOPTS "$mode" "$path"
+		fi
+	done
+}
+
 _f() {
 	# Create a file if it doesn't exist yet
 	local path=$1 mode=$2 uid=$3 gid=$4
@@ -166,6 +184,28 @@ _R() {
 	for path in "${paths[@]}"; do
 		[[ -d $path ]] && rm -rf --one-file-system "$path"
 	done
+}
+
+_z() {
+	# Set ownership, access mode and relabel security context of a file or
+	# directory if it exists. Lines of this type accept shell-style globs in
+	# place of normal path names.
+	local -a paths=($1)
+	local mode=$2 uid=$3 gid=$4
+
+	(( CREATE )) || return 0
+
+	relabel "$@"
+}
+
+_Z() {
+	# Recursively set ownership, access mode and relabel security context of a
+	# path and all its subdirectories (if it is a directory). Lines of this type
+	# accept shell-style globs in place of normal path names.
+
+	(( CREATE )) || return 0
+
+	CHOPTS=-R relabel "$@"
 }
 
 shopt -s nullglob
