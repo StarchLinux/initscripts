@@ -22,26 +22,6 @@ hardware, networking and daemons.
 
 Localization[[L]]
 -----------------
-*LOCALE*::
-	This sets your system language, which will be used by all i18n-friendly applications and utilities.
-	See `locale -a` (or locale.gen) for available options. 	LANG in /etc/locale.conf takes precedence.
-	Default: "en_US.UTF-8"
-
-*DAEMON_LOCALE*::
-	If set to 'yes', use $LOCALE as the locale during daemon startup and during the boot process.
-	If set to 'no', the C locale is used.
-	Default: "no"
-
-*HARDWARECLOCK*::
-	How to interpret/update the hardware clock. (used by hwclock)
-	Options:
-	    - "": fall back to the value in /var/lib/hwclock/adjfile.
-	    - "UTC": most robust, allows operating systems to abstract local time and ease DST. (recommended)
-	    - "localtime": apply timezone (and DST) in hardwareclock: discouraged.
-	      Choose this if you dualboot with an OS which cannot handle UTC BIOS times correctly, like Windows.
-	    - any other value will result in the hardware clock being left untouched (useful for virtualization)
-	Default: "UTC"
-
 *TIMEZONE*::
 	Specifies your time zone. Possible time zones are the relative path to a zoneinfo file starting
 	from the directory /usr/share/zoneinfo. For example, a German timezone would be Europe/Berlin,
@@ -49,11 +29,21 @@ Localization[[L]]
 	Note: if unset, the value in /etc/localtime is used unchanged
 	Default: "Canada/Pacific"
 
+*HARDWARECLOCK*::
+	How to interpret/update the hardware clock. (used by hwclock)
+	Options:
+	    - empty: fall back to the value in /var/lib/hwclock/adjfile, which defaults to UTC. (recommended)
+	    - "UTC": most robust, allows operating systems to abstract local time and ease DST.
+	    - "localtime": apply timezone (and DST) in hardwareclock: discouraged.
+	      Choose this if you dualboot with an OS which cannot handle UTC BIOS times correctly, like Windows.
+	    - any other value will result in the hardware clock being left untouched (useful for virtualization)
+	Default: empty
+
 *KEYMAP*::
 	Defines the keymap to load with the loadkeys program on bootup.
 	Possible keymaps are found in /usr/share/kbd/keymaps. Please note that this
-	setting is only valid for your TTYs, not any graphical window managers or X!
-	Defalut: "us"
+	setting is only valid for your TTYs, not any graphical window managers or X.
+	Defalut: empty
 
 *CONSOLEFONT*::
 	Defines the console font to load with the setfont program on bootup.
@@ -68,6 +58,17 @@ Localization[[L]]
 	If you're using X11 for everyday work, don't bother,
 	as it only affects the output of Linux console applications.
 	Default: empty
+
+*LOCALE*::
+	This sets your system language, which will be used by all i18n-friendly applications and utilities.
+	See `locale -a` (or locale.gen) for available options. 	LANG in /etc/locale.conf takes precedence.
+	If unset, it falls back to the C locale.
+	Default: empty
+
+*DAEMON_LOCALE*::
+	If set to 'yes', use $LOCALE as the locale during daemon startup and during the boot process.
+	If set to 'no', the C locale is used.
+	Default: "no"
 
 *USECOLOR*::
 	use ANSI color sequences in startup messages
