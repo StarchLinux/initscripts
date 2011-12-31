@@ -1,5 +1,6 @@
 tags
 *.tar.xz*
+hostname.5
 locale.conf.5
 vconsole.conf.5
 rc.conf.5
