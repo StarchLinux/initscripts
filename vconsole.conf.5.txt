@@ -14,18 +14,16 @@ SYNOPSIS
 
 DESCRIPTION
 -----------
-
 The /etc/vconsole.conf file configures the virtual console, i.e. keyboard mapping and console font.
 
 The basic file format of the vconsole.conf is a newline-separated list environment-like shell-compatible variable assignments. It is
 possible to source the configuration from shell scripts, however, beyond mere variable assignments no shell features are supported,
 allowing applications to read the file without implementing a shell compatible execution engine.
 
-In Arch /etc/rc.conf is also checked for vconsole configuration as well, however only as fallback, as described below.
+In Arch /etc/rc.conf is checked for vconsole configuration as well as described below, however only as fallback.
 
 OPTIONS
 -------
-
 The following options are understood:
 
 *KEYMAP=*
@@ -53,7 +51,6 @@ EXAMPLE
 
 SEE ALSO
 --------
-
 systemd.vconsole.conf(5), loadkeys(1), setfont(8), rc.conf(5)
 
 AUTHORS

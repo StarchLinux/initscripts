@@ -24,12 +24,12 @@ The locale settings configured in /etc/locale.conf are system-wide and are inher
 unset by individual programs or individual users. To avoid services inheriting the locale settings on sysvinit systems, the
 DAEMON_LOCALE variable in rc.conf can be set to "no".
 
-In Arch /etc/rc.conf is also checked for locale configuration as well, however only as fallback.
+In Arch /etc/rc.conf is checked for locale configuration as well, however only as fallback.
 
 OPTIONS
 -------
 The following locale settings may be set using /etc/locale.conf: *LANG=*, *LANGUAGE=*, *LC_CTYPE=*, *LC_NUMERIC=*, *LC_TIME=*, *LC_COLLATE=*,
-*LC_MONETARY=*, *LC_MESSAGES=*, *LC_PAPER=*, *LC_NAME=*, *LC_ADDRESS=*, *LC_TELEPHONE=*, *LC_MEASUREMENT=*, *LC_IDENTIFICATION=*. Note that *LC_ALL* may not be be configured in this file. For details about the meaning and semantics of these settings, refer to locale(7).
+*LC_MONETARY=*, *LC_MESSAGES=*, *LC_PAPER=*, *LC_NAME=*, *LC_ADDRESS=*, *LC_TELEPHONE=*, *LC_MEASUREMENT=*, *LC_IDENTIFICATION=*. Note that *LC_ALL* may not be be configured in this file. For details about the meaning and semantics of these settings, refer to locale(7). The LANG variable overrides LOCALE from /etc/rc.conf.
 
 SEE ALSO
 --------
