@@ -1,5 +1,7 @@
 tags
 *.tar.xz*
+locale.conf.5
+vconsole.conf.5
 rc.conf.5
 rc.d.8
 pkg/

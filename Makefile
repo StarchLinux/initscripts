@@ -29,7 +29,7 @@ install: installdirs doc
 	install -m755 -t $(DESTDIR)/etc/profile.d locale.sh
 	install -m755 -t $(DESTDIR)/usr/sbin rc.d
 	install -m644 -t ${DESTDIR}/usr/share/man/man8 rc.d.8
-	install -m644 -t ${DESTDIR}/usr/share/man/man5 rc.conf.5
+	install -m644 -t ${DESTDIR}/usr/share/man/man5 rc.conf.5 locale.conf vconsole.conf
 	install -m755 -t $(DESTDIR)/usr/lib/initscripts arch-tmpfiles arch-sysctl
 	install -m644 tmpfiles.conf $(DESTDIR)/usr/lib/tmpfiles.d/arch.conf
 	install -m644 -T bash-completion $(DESTDIR)/etc/bash_completion.d/rc.d
@@ -41,10 +41,16 @@ rc.d.8: rc.d.8.txt
 rc.conf.5: rc.conf.5.txt
 	a2x -d manpage -f manpage rc.conf.5.txt
 
-doc: rc.d.8 rc.conf.5
+locale.conf.5: locale.conf.5.txt
+	a2x -d manpage -f manpage locale.conf.5.txt
+
+vconsole.conf.5: vconsole.conf.5.txt
+	a2x -d manpage -f manpage vconsole.conf.5.txt
+
+doc: rc.d.8 rc.conf.5 locale.conf.5 vconsole.conf.5
 
 clean:
-	rm -f rc.d.8 rc.conf.5
+	rm -f rc.d.8 rc.conf.5 locale.conf.5 vconsole.conf.5
 
 tar:
 	git archive HEAD --prefix=initscripts-$(VER)/ | xz > initscripts-$(VER).tar.xz
