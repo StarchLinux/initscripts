@@ -39,6 +39,7 @@ Default: empty
 How to interpret/update the hardware clock. (used by hwclock)
 
 Options:
+
 	- empty: fall back to the value in /var/lib/hwclock/adjfile, which defaults to UTC. This is recommended
 	  as other users of hwclock might change adjfile and hence cause rc.conf and adjfile to be out of sync.
 	- "UTC": most robust, allows operating systems to abstract local time and ease DST.
@@ -51,16 +52,16 @@ Default: empty
 
 *KEYMAP=*
 
-Defines the keymap to load with the loadkeys program on bootup.
-Possible keymaps are found in /usr/share/kbd/keymaps. Please note that this
-setting is only valid for your TTYs, not any graphical window managers or X.
-KEYMAP in /etc/vconsole.conf takes precedence.
+Defines the keymap to load with the loadkeys program on boot. Possible keymaps are
+found in /usr/share/kbd/keymaps. Please note that this setting is only valid for
+your TTYs, not any graphical window managers or X. KEYMAP in /etc/vconsole.conf takes
+precedence.
 
 Defalut: empty
 
 *CONSOLEFONT=*
 
-Defines the console font to load with the setfont program on bootup.
+Defines the console font to load with the setfont program on boot.
 Possible fonts are found in /usr/share/kbd/consolefonts (only needed for non-US).
 FONT in /etc/vconsole.conf takes precedence.
 
@@ -68,7 +69,7 @@ Default: empty
 
 *CONSOLEMAP=*
 
-Defines the console map to load with the setfont program on bootup. Possible maps are found in
+Defines the console map to load with the setfont program on boot. Possible maps are found in
 /usr/share/kbd/consoletrans. Set this to a map suitable for the appropriate locale (8859-1 for Latin1,
 for example) if you're using an UTF-8 locale and use programs that generate 8-bit output. If you're
 using X11 for everyday work, don't bother, as it only affects the output of Linux console applications.
