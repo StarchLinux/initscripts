@@ -401,7 +401,7 @@ read_crypttab() {
 }
 
 set_timezone() {
-	local tz=$1 zonefile=/usr/share/zoneinfo/$tz
+	local tz=$1 zonefile=/usr/share/zoneinfo/$1
 
 	[[ $tz ]] || return 1
 
