@@ -40,8 +40,8 @@ How to interpret/update the hardware clock. (used by hwclock)
 
 Options:
 
-	- empty: fall back to the value in /var/lib/hwclock/adjfile, which defaults to UTC. This is recommended
-	  as other users of hwclock might change adjfile and hence cause rc.conf and adjfile to be out of sync.
+	- empty: fall back to the value in /var/lib/hwclock/adjtime, which defaults to UTC. This is recommended
+	  as other users of hwclock might change the adjtime file and hence cause rc.conf and adjtime to be out of sync.
 	- "UTC": most robust, allows operating systems to abstract local time and ease DST.
 	- "localtime": apply timezone (and DST) in hardwareclock: discouraged.
 	  Choose this if you dualboot with an OS which cannot handle UTC BIOS times correctly, like Windows (note
