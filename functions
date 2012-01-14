@@ -455,7 +455,7 @@ fsck_reboot() {
 		echo "*                                                          *"
 		echo "*  Please repair manually and reboot. Note that the root   *"
 		echo "*  file system is currently mounted read-only. To remount  *"
-		echo "*  it read-write type: mount -n -o remount,rw /            *"
+		echo "*  it read-write type: mount -o remount,rw /               *"
 		echo "*  When you exit the maintenance shell the system will     *"
 		echo "*  reboot automatically.                                   *"
 		echo "*                                                          *"
@@ -465,7 +465,7 @@ fsck_reboot() {
 	fi
 	echo "Automatic reboot in progress..."
 	umount -a
-	mount -n -o remount,ro /
+	mount -o remount,ro /
 	reboot -f
 	exit 0
 }
