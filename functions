@@ -358,7 +358,7 @@ udevd_modprobe() {
 	stat_done
 
 	# Load modules from the MODULES array defined in rc.conf
-	[[ -f /proc/modules ]] && (( ${#MODULES[*]} )) &&
+	(( ${#MODULES[*]} )) &&
 		status -v "Loading User-specified Modules" modprobe -ab "${MODULES[@]}"
 
 	status "Waiting for UDev uevents to be processed" \
