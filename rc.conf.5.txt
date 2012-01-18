@@ -106,12 +106,6 @@ Modules to load at boot-up.  To blacklist modules, see "man modprobe.conf".
 
 Default: ().
 
-*UDEV_TIMEOUT=*
-
-Udev settle timeout.
-
-Default: 30
-
 *USEDMRAID=*
 
 Scan for FakeRAID (dmraid) Volumes at startup.

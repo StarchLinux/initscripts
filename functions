@@ -357,7 +357,7 @@ udevd_modprobe() {
 		status "Loading User-specified Modules" modprobe -ab "${MODULES[@]}"
 
 	status "Waiting for UDev uevents to be processed" \
-		udevadm settle --timeout=${UDEV_TIMEOUT:-30}
+		udevadm settle
 
 	run_hook "$1_udevsettled"
 
