@@ -137,7 +137,7 @@ NETWORKING[[N]]
 Hostname of machine. Should also be put in /etc/hosts. The contents of
 /etc/hostname (if not empty) takes precedence.
 
-Default: "myhost"
+Default: empty
 
 The following settings help you setting up a wired network.
 
