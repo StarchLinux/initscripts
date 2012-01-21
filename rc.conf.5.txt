@@ -57,7 +57,7 @@ found in /usr/share/kbd/keymaps. Please note that this setting is only valid for
 your TTYs, not any graphical window managers or X. KEYMAP in /etc/vconsole.conf takes
 precedence.
 
-Defalut: empty
+Default: empty
 
 *CONSOLEFONT=*
 
