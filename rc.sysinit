@@ -175,19 +175,22 @@ fi
 # Check filesystems
 [[ -f /forcefsck ]] || in_array forcefsck $(< /proc/cmdline) && FORCEFSCK="-- -f"
 declare -r FORCEFSCK
-run_hook sysinit_prefsck
-if [[ -x $(type -P fsck) ]]; then
-	stat_busy "Checking Filesystems"
-		fsck_all >|"${FSCK_OUT:-/dev/stdout}" 2>|"${FSCK_ERR:-/dev/stdout}"
-	declare -r fsckret=$?
-	(( fsckret <= 1 )) && stat_done || stat_fail
-else
-	declare -r fsckret=0
-fi
-run_hook sysinit_postfsck
 
-# Single-user login and/or automatic reboot if needed
-fsck_reboot $fsckret
+if [[ -n $FORCEFSCK ]] || { [[ ! -f /fastboot ]] && ! in_array fastboot $(< /proc/cmdline); }; then
+	run_hook sysinit_prefsck
+	if [[ -x $(type -P fsck) ]]; then
+		stat_busy "Checking Filesystems"
+			fsck_all >|"${FSCK_OUT:-/dev/stdout}" 2>|"${FSCK_ERR:-/dev/stdout}"
+		declare -r fsckret=$?
+		(( fsckret <= 1 )) && stat_done || stat_fail
+	else
+		declare -r fsckret=0
+	fi
+	run_hook sysinit_postfsck
+
+	# Single-user login and/or automatic reboot if needed
+	fsck_reboot $fsckret
+fi
 
 status "Remounting Root" \
 	mount -o remount /
