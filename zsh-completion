@@ -28,7 +28,7 @@ _rc.d () {
 					;;
 			esac
 		;;
-  esac
+	esac
 }
 
 _rc.d "$@"
