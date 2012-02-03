@@ -169,7 +169,7 @@ if [[ -f /etc/crypttab && $CS ]] && grep -q ^[^#] /etc/crypttab; then
 	crypto_unlocked=0
 	read_crypttab do_unlock && stat_done || stat_fail
 	# Maybe someone has LVM on an encrypted block device
-	(( crypto_unlocked == 1 )) && activate_vgs
+	(( crypto_unlocked )) && activate_vgs
 fi
 
 # Check filesystems

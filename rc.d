@@ -41,10 +41,10 @@ not exist or is not executable.${C_CLEAR}\n" >&2
 			exit 2
 		fi
 		# check filter
-		((${filter[started]} == 1)) && ck_daemon "$daemon" && continue
-		((${filter[stopped]} == 1)) && ! ck_daemon "$daemon" && continue
-		((${filter[auto]} == 1)) && ck_autostart "$daemon" && continue
-		((${filter[noauto]} == 1)) && ! ck_autostart "$daemon" && continue
+		(( ${filter[started]} )) && ck_daemon "$daemon" && continue
+		(( ${filter[stopped]} )) && ! ck_daemon "$daemon" && continue
+		(( ${filter[auto]} )) && ck_autostart "$daemon" && continue
+		(( ${filter[noauto]} )) && ! ck_autostart "$daemon" && continue
 		new_daemons+=("$daemon")
 	done
 	daemons=("${new_daemons[@]}")

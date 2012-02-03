@@ -260,7 +260,7 @@ case "$1" in
 		else
 			network_up
 		fi
-		if ((error == 0)); then
+		if (( ! error )); then
 			add_daemon network
 			stat_done
 		else
@@ -296,7 +296,7 @@ case "$1" in
 		else
 			network_down
 		fi
-		if ((error == 0)); then
+		if (( ! error )); then
 			stat_done
 		else
 			stat_fail
