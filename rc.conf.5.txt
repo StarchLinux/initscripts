@@ -102,7 +102,7 @@ HARDWARE[[H]]
 -------------
 *MODULES=*
 
-Modules to load at boot-up.  To blacklist modules, see "man modprobe.conf".
+Modules to load at boot-up.  To blacklist modules, see "man modprobe.d".
 
 Default: ().
 
