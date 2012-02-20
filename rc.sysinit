@@ -89,7 +89,7 @@ udevd_modprobe sysinit
 activate_vgs
 
 # Set up non-root encrypted partition mappings
-if [[ -f /etc/crypttab && $CS ]] && grep -q ^[^#] /etc/crypttab; then
+if [[ -f /etc/crypttab ]] && type -p cryptsetup >/dev/null; then
 	stat_busy "Unlocking encrypted volumes:"
 		modprobe -q dm-crypt 2>/dev/null
 		do_unlock() {
@@ -102,7 +102,7 @@ if [[ -f /etc/crypttab && $CS ]] && grep -q ^[^#] /etc/crypttab; then
 			# Ordering of options is different if you are using LUKS vs. not.
 			# Use ugly swizzling to deal with it.
 			# isLuks only gives an exit code but no output to stdout or stderr.
-			if $CS isLuks "$2" 2>/dev/null; then
+			if cryptsetup isLuks "$2" 2>/dev/null; then
 				open=luksOpen
 				a=$2
 				b=$1
@@ -125,13 +125,13 @@ if [[ -f /etc/crypttab && $CS ]] && grep -q ^[^#] /etc/crypttab; then
 					fi
 					if (( _overwriteokay == 0 )); then
 						false
-					elif $CS -d /dev/urandom $4 $open "$a" "$b" >/dev/null; then
+					elif cryptsetup -d /dev/urandom $4 $open "$a" "$b" >/dev/null; then
 						stat_append "creating swapspace.."
 						mkswap -f -L $1 /dev/mapper/$1 >/dev/null
 					fi;;
 				ASK)
 					printf "\nOpening '$1' volume:\n"
-					$CS $4 $open "$a" "$b" < /dev/console;;
+					cryptsetup $4 $open "$a" "$b" < /dev/console;;
 				/dev*)
 					local ckdev=${3%%:*}
 					local cka=${3#*:}
@@ -153,13 +153,13 @@ if [[ -f /etc/crypttab && $CS ]] && grep -q ^[^#] /etc/crypttab; then
 							# cka is numeric: cka=offset, ckb=length
 							dd if=${ckdev} of=${ckfile} bs=1 skip=${cka} count=${ckb} >/dev/null 2>&1;;
 					esac
-					$CS -d ${ckfile} $4 $open "$a" "$b" >/dev/null
+					cryptsetup -d ${ckfile} $4 $open "$a" "$b" >/dev/null
 					dd if=/dev/urandom of=${ckfile} bs=1 count=$(stat -c %s ${ckfile}) conv=notrunc >/dev/null 2>&1
 					rm ${ckfile};;
 				/*)
-					$CS -d "$3" $4 $open "$a" "$b" >/dev/null;;
+					cryptsetup -d "$3" $4 $open "$a" "$b" >/dev/null;;
 				*)
-					echo "$3" | $CS $4 $open "$a" "$b" >/dev/null;;
+					echo "$3" | cryptsetup $4 $open "$a" "$b" >/dev/null;;
 			esac
 			if (( $? )); then
 				failed=1

@@ -379,17 +379,6 @@ activate_vgs() {
 	(( $? == 0 )) && stat_done || stat_fail
 }
 
-# Arch cryptsetup packages traditionally contained the binaries
-#  /usr/sbin/cryptsetup
-#  /sbin/cryptsetup.static
-# By default, initscripts used the /sbin/cryptsetup.static.
-# Newer packages will only have /sbin/cryptsetup and no static binary
-# This ensures maximal compatibility with the old and new layout
-for CS in /sbin/cryptsetup /usr/sbin/cryptsetup \
-		/sbin/cryptsetup.static ''; do
-	[[ -x $CS ]] && break
-done
-
 read_crypttab() {
 	# $1 = function to call with the split out line from the crypttab
 	local line nspo failed=0
