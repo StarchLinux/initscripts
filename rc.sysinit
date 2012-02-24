@@ -64,7 +64,9 @@ if [[ $HWCLOCK_PARAMS ]]; then
 		# is used. If HARDWARECLOCK is not set in rc.conf, the value in
 		# /var/lib/hwclock/adjfile is used (in this case /var can not be a separate
 		# partition).
-	TZ=$TIMEZONE hwclock $HWCLOCK_PARAMS && stat_done || stat_fail
+	[[ $TIMEZONE ]] && export TZ=$TIMEZONE
+	hwclock $HWCLOCK_PARAMS && stat_done || stat_fail
+	unset TZ
 fi
 
 # Start/trigger UDev, load MODULES and settle UDev
