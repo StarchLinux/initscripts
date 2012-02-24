@@ -477,7 +477,6 @@ fsck_reboot() {
 
 mount_all() {
 	mount -a -t "nosysfs,no${NETFS//,/,no}" -O no_netdev
-	return $(($? & ~64)) # ignore return code 64: some mounts succeeded
 }
 
 umount_all() {
