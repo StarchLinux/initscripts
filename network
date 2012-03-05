@@ -52,7 +52,7 @@ network_down() {
 	have_interface "$interface" || return 1
 
 	if [[ -f /run/dhcpcd-$interface.pid ]]; then
-		dhcpcd -k $interface || return 1
+		dhcpcd -qk $interface || return 1
 	else
 		ip addr flush dev $interface || return 1
 	fi
