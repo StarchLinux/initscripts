@@ -505,7 +505,9 @@ umount_all() {
 		mounts=("$target" "${mounts[@]}")
 	done < <(findmnt -mrunRo TARGET,FSTYPE,OPTIONS /)
 
-	umount -r "${mounts[@]}"
+	if (( ${#mounts[*]} )); then
+		umount -r "${mounts[@]}"
+	fi
 
 }
 
