@@ -235,7 +235,7 @@ fi
 # directories declared later in the tmpfiles_d array will override earlier
 # directories, on a per file basis.
 # Example: `/etc/tmpfiles.d/foo.conf' supersedes `/usr/lib/tmpfiles.d/foo.conf'.
-for path in "${tmpfiles_d[@]}"; do
+for path in "${@:-${tmpfiles_d[@]}}"; do
 	[[ -f $path ]] && fragments[${path##*/}]=${path%/*}
 done
 
