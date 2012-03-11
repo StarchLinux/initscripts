@@ -25,13 +25,19 @@ checkparams() {
 	fi
 
 	# uid must be numeric or a valid user name
-	if [[ $uid ]] && ! getent passwd "$uid" >/dev/null; then
-		return 1
+	# don't try to resolve numeric IDs in case they don't exist
+	if [[ $uid ]]; then
+		if [[ $uid != +([0-9]) ]] && ! getent passwd "$uid" >/dev/null; then
+			return 1
+		fi
 	fi
 
 	# gid must be numeric or a valid group name
-	if [[ $gid ]] && ! getent group "$gid" >/dev/null; then
-		return 1
+	# don't try to resolve numeric IDs in case they don't exist
+	if [[ $gid ]]; then
+		if [[ $gid != +([0-9]) ]] && ! getent group "$gid" >/dev/null; then
+			return 1
+		fi
 	fi
 
 	return 0
