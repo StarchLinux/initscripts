@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# /usr/lib/initscripts/arch-binfmt
+#
+# Configure additional binary formats at boot
+#
+
+shopt -s nullglob
+
+declare -a binfmt_d=(
+	/usr/lib/binfmt.d/*.conf
+	/etc/binfmt.d/*.conf
+	/run/binfmt.d/*.conf
+)
+declare -A fragments
+
+# check binfmt_misc filesystem is mounted
+mountpoint -q /proc/sys/fs/binfmt_misc ||
+	{ echo "/proc/sys/fs/binfmt_misc is not mounted"; exit 1;}
+
+# files declared later in the sysctl_d array will override earlier
+# Example: `/etc/sysctl.d/foo.conf' supersedes `/usr/lib/sysctl.d/foo.conf'.
+for path in "${@:-${binfmt_d[@]}}"; do
+	[[ -f $path ]] && fragments[${path##*/}]=$path
+done
+
+for path in "${fragments[@]}"; do
+	while read -r line; do
+		[[ ${line:0:1} == '#' ]] && continue
+		printf "%s" "$line" > /proc/sys/fs/binfmt_misc/register
+	done < "$path"
+done
+
+:
+
+# vim: set ts=2 sw=2 noet:

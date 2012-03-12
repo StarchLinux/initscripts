@@ -11,8 +11,11 @@ printhl "Arch Linux\n"
 printhl "${C_H2}http://www.archlinux.org"
 printsep
 
-# mount /proc, /sys, /run, /dev, /run/lock, /dev/pts, /dev/shm (the api filesystems)
+# mount the api filesystems
+# /proc, /proc/sys/fs/binfmt_misc, /sys, /run, /dev, /run/lock, /dev/pts, /dev/shm
 mountpoint -q /proc    || mount -t proc proc /proc -o nosuid,noexec,nodev
+mountpoint -q /proc/sys/fs/binfmt_misc ||
+	mount -t binfmt_misc binfmt /proc/sys/fs/binfmt_misc
 mountpoint -q /sys     || mount -t sysfs sys /sys -o nosuid,noexec,nodev
 mountpoint -q /run     || mount -t tmpfs run /run -o mode=0755,nosuid,nodev
 mountpoint -q /dev     || mount -t devtmpfs dev /dev -o mode=0755,nosuid
