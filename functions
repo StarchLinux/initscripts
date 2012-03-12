@@ -417,13 +417,8 @@ set_timezone() {
 
 	if [[ -L /etc/localtime && /etc/localtime -ef $zonefile ]]; then
 		return 0
-	fi
-
-	# respect the user's decision to symlink or copy
-	if [[ -L /etc/localtime ]]; then
-		ln -sf "/usr/share/zoneinfo/$tz" /etc/localtime
 	else
-		cp --remove-destination "/usr/share/zoneinfo/$tz" /etc/localtime
+		ln -sf "/usr/share/zoneinfo/$tz" /etc/localtime
 	fi
 }
 
