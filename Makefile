@@ -62,3 +62,5 @@ tar:
 release: tar
 	scp initscripts-$(VER).tar.xz gerolde.archlinux.org:/srv/ftp/other/initscripts/
 	scp initscripts-$(VER).tar.xz pkgbuild.com:~/svn-packages/initscripts/trunk/
+
+.PHONY: all installdirs install doc clean tar release
