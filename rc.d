@@ -1,6 +1,5 @@
 #!/bin/bash
 
-NEED_ROOT=0 # this script can be run without be root
 . /etc/rc.conf
 . /etc/rc.d/functions
 
