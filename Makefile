@@ -24,7 +24,8 @@ MAN_PAGES := \
 	rc.conf.5 \
 	locale.conf.5 \
 	vconsole.conf.5 \
-	hostname.5
+	hostname.5 \
+	binfmt.d.5
 
 all: doc
 
