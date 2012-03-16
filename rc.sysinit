@@ -176,7 +176,7 @@ if [[ -f /etc/crypttab && $CS ]] && grep -q ^[^#] /etc/crypttab; then
 fi
 
 # Check filesystems
-[[ -f /forcefsck ]] || in_array forcefsck $(< /proc/cmdline) && FORCEFSCK="-- -f"
+[[ -f /forcefsck ]] || in_array forcefsck $(< /proc/cmdline) && FORCEFSCK="-f"
 declare -r FORCEFSCK
 
 if [[ -n $FORCEFSCK ]] || { [[ ! -f /fastboot ]] && ! in_array fastboot $(< /proc/cmdline); }; then
