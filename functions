@@ -444,6 +444,7 @@ do_unlock() {
 		/*)
 			cryptsetup -d "$3" $4 $open "$a" "$b" >/dev/null;;
 		*)
+			printf "${C_FAIL}crypttab contains a literal encryption key. This will stop working in the future.${C_OTHER}\n"
 			echo "$3" | cryptsetup $4 $open "$a" "$b" >/dev/null;;
 	esac
 	if (( $? )); then
