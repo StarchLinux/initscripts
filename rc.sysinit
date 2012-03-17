@@ -54,8 +54,6 @@ esac
 
 if [[ $HWCLOCK_PARAMS ]]; then
 	stat_busy "Adjusting system time and setting kernel timezone"
-		# enable rtc access
-		modprobe -q -a rtc-cmos rtc genrtc
 
 		# Adjust the system time for timezone offset if rtc is not in UTC
 		# 1. Make creation time on device nodes sane (FS#8665)
@@ -91,7 +89,6 @@ activate_vgs
 # Set up non-root encrypted partition mappings
 if [[ -f /etc/crypttab ]] && type -p cryptsetup >/dev/null; then
 	stat_busy "Unlocking encrypted volumes:"
-		modprobe -q dm-crypt 2>/dev/null
 		do_unlock() {
 			# $1 = requested name
 			# $2 = source device
