@@ -65,14 +65,14 @@ status "Unmounting Non-API Filesystems" umount_all
 run_hook shutdown_postumount
 
 # Kill non-root encrypted partition mappings
-if [[ -f /etc/crypttab && $CS ]] && grep -q ^[^#] /etc/crypttab; then
+if [[ -f /etc/crypttab ]] && type -p cryptsetup >/dev/null; then
 	stat_busy "Deactivating encrypted volumes:"
 		# Maybe someone has LVM on an encrypted block device
 		# executing an extra vgchange is errorless
 		[[ $USELVM = [Yy][Ee][Ss] ]] && vgchange --sysinit -a n &>/dev/null
 		do_lock() {
 			stat_append "${1}.."
-			if $CS remove "$1" &>/dev/null; then
+			if cryptsetup remove "$1" &>/dev/null; then
 				stat_append "ok "
 			else
 				stat_append "failed "
