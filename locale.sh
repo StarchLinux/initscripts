@@ -4,15 +4,11 @@ if [ -s /etc/locale.conf ]; then
 	. /etc/locale.conf
 fi
 
-if [ -n "$LANG" ]; then
-	export LANG
-else
-	if [ -s /etc/rc.conf ]; then
-		export LANG=$(. /etc/rc.conf 2> /dev/null ; echo "$LOCALE")
-	else
-		export LANG="C"
-	fi
+if [ -z "$LANG" ] && [ -s /etc/rc.conf ]; then
+	LANG=$(. /etc/rc.conf 2>/dev/null; echo "$LOCALE")
 fi
+
+export LANG=${LANG:-C}
 
 if [ -n "$LC_CTYPE" ]; then
 	export LC_CTYPE
