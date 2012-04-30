@@ -200,16 +200,7 @@ Default: "no"
 
 *NETWORKS=*
 
-Enable these netcfg profiles at boot-up. These replace the network
-configuration above and are useful if you happen to need more advanced
-network features than the simple network service supports,
-such as multiple network configurations (ie, laptop users).
-	   - set to 'menu' to present a menu during boot-up (dialog package required)
-	   - prefix an entry with a ! to disable it
-
-Network profiles are found in /etc/network.d
-There is a template file included there that can be used to create
-new profiles.  This requires the netcfg package.
+This functionality is deprecated, please refer to the 'netcfg' documentation.
 
 DAEMONS[[D]]
 ------------
