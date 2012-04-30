@@ -36,6 +36,43 @@ run_hook sysinit_start
 # log all console messages
 bootlogd -p /run/bootlogd.pid
 
+if [[ -s /etc/locale.conf ]]; then
+	parse_envfile /etc/locale.conf "LANG"
+	[[ $LANG ]] && LOCALE=$LANG
+fi
+if [[ ${LOCALE,,} =~ utf ]]; then
+	stat_busy "Setting Consoles to UTF-8 mode"
+		# UTF-8 consoles are default since 2.6.24 kernel
+		# this code is needed not only for older kernels,
+		# but also when user has set vt.default_utf8=0 but LOCALE is *.UTF-8.
+		for i in /dev/tty[0-9]*; do
+			kbd_mode -u < ${i}
+			printf "\e%%G" > ${i}
+		done
+		echo 1 >| /sys/module/vt/parameters/default_utf8
+	stat_done
+else
+	stat_busy "Setting Consoles to legacy mode"
+		# make non-UTF-8 consoles work on 2.6.24 and newer kernels
+		for i in /dev/tty[0-9]*; do
+			kbd_mode -a < ${i}
+			printf "\e%%@" > ${i}
+		done
+		echo 0 >| /sys/module/vt/parameters/default_utf8
+	stat_done
+fi
+
+if [[ -s /etc/vconsole.conf ]]; then
+	parse_envfile /etc/vconsole.conf "${vconsolevars[@]}"
+	[[ $FONT ]] && CONSOLEFONT=$FONT
+	[[ $FONT_MAP ]] && CONSOLEMAP=$FONT_MAP
+fi
+[[ $KEYMAP ]] &&
+	status "Loading Keyboard Map: $KEYMAP" loadkeys -q $KEYMAP
+
+# Set console font if required
+set_consolefont
+
 if [[ ! -a /usr/lib ]] ; then
 	printf "${C_FAIL}/usr is not mounted. This is not supported.${C_OTHER}\n"
 fi
@@ -143,43 +180,6 @@ if [[ $HOSTNAME ]]; then
 	stat_busy "Setting Hostname: $HOSTNAME"
 	echo "$HOSTNAME" >| /proc/sys/kernel/hostname && stat_done || stat_fail
 fi
-
-if [[ -s /etc/locale.conf ]]; then
-	parse_envfile /etc/locale.conf "LANG"
-	[[ $LANG ]] && LOCALE=$LANG
-fi
-if [[ ${LOCALE,,} =~ utf ]]; then
-	stat_busy "Setting Consoles to UTF-8 mode"
-		# UTF-8 consoles are default since 2.6.24 kernel
-		# this code is needed not only for older kernels,
-		# but also when user has set vt.default_utf8=0 but LOCALE is *.UTF-8.
-		for i in /dev/tty[0-9]*; do
-			kbd_mode -u < ${i}
-			printf "\e%%G" > ${i}
-		done
-		echo 1 >| /sys/module/vt/parameters/default_utf8
-	stat_done
-else
-	stat_busy "Setting Consoles to legacy mode"
-		# make non-UTF-8 consoles work on 2.6.24 and newer kernels
-		for i in /dev/tty[0-9]*; do
-			kbd_mode -a < ${i}
-			printf "\e%%@" > ${i}
-		done
-		echo 0 >| /sys/module/vt/parameters/default_utf8
-	stat_done
-fi
-
-if [[ -s /etc/vconsole.conf ]]; then
-	parse_envfile /etc/vconsole.conf "${vconsolevars[@]}"
-	[[ $FONT ]] && CONSOLEFONT=$FONT
-	[[ $FONT_MAP ]] && CONSOLEMAP=$FONT_MAP
-fi
-[[ $KEYMAP ]] &&
-	status "Loading Keyboard Map: $KEYMAP" loadkeys -q $KEYMAP
-
-# Set console font if required
-set_consolefont
 
 stat_busy "Saving dmesg Log"
 	if [[ -e /proc/sys/kernel/dmesg_restrict ]] &&
