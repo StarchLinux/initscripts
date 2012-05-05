@@ -23,7 +23,7 @@ for path in "${@:-${sysctl_d[@]}}"; do
 done
 
 for path in "${fragments[@]}"; do
-	sysctl -q -p "$path"
+	sysctl -q -p"$path"
 done
 
 # vim: set ts=2 sw=2 noet:
