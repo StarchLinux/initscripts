@@ -36,6 +36,41 @@ run_hook sysinit_start
 # log all console messages
 bootlogd -p /run/bootlogd.pid
 
+if [[ ! -a /usr/lib ]] ; then
+	printf "${C_FAIL}/usr is not mounted. This is not supported.${C_OTHER}\n"
+fi
+
+if ! grep -q devtmpfs /proc/filesystems; then
+	printf "${C_FAIL}Your kernel does not have devtmpfs support. This is not supported.${C_OTHER}\n"
+fi
+
+HWCLOCK_PARAMS="--systz"
+case $HARDWARECLOCK in
+	"") ;;
+	UTC) HWCLOCK_PARAMS+=" --utc --noadjfile";;
+	localtime) HWCLOCK_PARAMS+=" --localtime --noadjfile";;
+	*) HWCLOCK_PARAMS="";;
+esac
+
+if [[ $HWCLOCK_PARAMS ]]; then
+	stat_busy "Adjusting system time and setting kernel timezone"
+
+		# Adjust the system time for timezone offset if rtc is not in UTC
+		# 1. Make creation time on device nodes sane (FS#8665)
+		# 2. Filesystem checks can depend on system time
+		# 3. This also sets the kernel time zone, used by e.g. vfat
+		# If TIMEZONE is not set in rc.conf, the timezone stored in /etc/localtime
+		# is used. If HARDWARECLOCK is not set in rc.conf, the value in
+		# /var/lib/hwclock/adjfile is used (in this case /var can not be a separate
+		# partition).
+	[[ $TIMEZONE ]] && export TZ=$TIMEZONE
+	hwclock $HWCLOCK_PARAMS && stat_done || stat_fail
+	unset TZ
+fi
+
+# Start/trigger UDev, load MODULES and settle UDev
+udevd_modprobe sysinit
+
 if [[ -s /etc/locale.conf ]]; then
 	parse_envfile /etc/locale.conf "LANG"
 	[[ $LANG ]] && LOCALE=$LANG
@@ -72,41 +107,6 @@ fi
 
 # Set console font if required
 set_consolefont
-
-if [[ ! -a /usr/lib ]] ; then
-	printf "${C_FAIL}/usr is not mounted. This is not supported.${C_OTHER}\n"
-fi
-
-if ! grep -q devtmpfs /proc/filesystems; then
-	printf "${C_FAIL}Your kernel does not have devtmpfs support. This is not supported.${C_OTHER}\n"
-fi
-
-HWCLOCK_PARAMS="--systz"
-case $HARDWARECLOCK in
-	"") ;;
-	UTC) HWCLOCK_PARAMS+=" --utc --noadjfile";;
-	localtime) HWCLOCK_PARAMS+=" --localtime --noadjfile";;
-	*) HWCLOCK_PARAMS="";;
-esac
-
-if [[ $HWCLOCK_PARAMS ]]; then
-	stat_busy "Adjusting system time and setting kernel timezone"
-
-		# Adjust the system time for timezone offset if rtc is not in UTC
-		# 1. Make creation time on device nodes sane (FS#8665)
-		# 2. Filesystem checks can depend on system time
-		# 3. This also sets the kernel time zone, used by e.g. vfat
-		# If TIMEZONE is not set in rc.conf, the timezone stored in /etc/localtime
-		# is used. If HARDWARECLOCK is not set in rc.conf, the value in
-		# /var/lib/hwclock/adjfile is used (in this case /var can not be a separate
-		# partition).
-	[[ $TIMEZONE ]] && export TZ=$TIMEZONE
-	hwclock $HWCLOCK_PARAMS && stat_done || stat_fail
-	unset TZ
-fi
-
-# Start/trigger UDev, load MODULES and settle UDev
-udevd_modprobe sysinit
 
 # bring up the loopback interface
 [[ -d /sys/class/net/lo ]] &&
