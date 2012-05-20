@@ -494,13 +494,11 @@ NETFS="nfs,nfs4,smbfs,cifs,codafs,ncpfs,shfs,fuse,fuseblk,glusterfs,davfs,fuse.g
 
 # Check local filesystems
 fsck_all() {
-	[[ -f /forcefsck ]] || in_array forcefsck $(< /proc/cmdline) && FORCEFSCK="-f"
-
-	if [[ ! -n $FORCEFSCK ]] && { [[ -f /fastboot ]] || in_array fastboot $(< /proc/cmdline); }; then
+	if [[ -f /forcefsck ]] || in_array forcefsck $(< /proc/cmdline); then
+		FORCEFSCK="-f"
+	elif [[ -f /fastboot ]] || in_array fastboot $(< /proc/cmdline); then
 		return 0
-	fi
-
-	if [[ -e /run/initramfs/root-fsck ]]; then
+	elif [[ -e /run/initramfs/root-fsck ]]; then
 		IGNORE_MOUNTED="-M"
 	fi
 
