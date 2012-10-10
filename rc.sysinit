@@ -17,7 +17,7 @@ mountpoint -q /proc    || mount -o nosuid,noexec,nodev -t proc proc /proc
 mountpoint -q /sys     || mount -o nosuid,noexec,nodev -t sysfs sys /sys
 mountpoint -q /run     || mount -o mode=0755,nosuid,nodev -t tmpfs run /run
 mountpoint -q /dev     || mount -o mode=0755,nosuid -t devtmpfs dev /dev
-mkdir -p -m 1777 /run/lock
+mkdir -p /run/lock && chmod 1777 /run/lock
 mkdir -p /dev/{pts,shm}
 mountpoint -q /dev/pts || mount /dev/pts &>/dev/null ||
 	mount -o mode=0620,gid=5,nosuid,noexec -n -t devpts devpts /dev/pts
