@@ -1,0 +1,287 @@
+'\" t
+.\"     Title: rc.conf
+.\"    Author: [see the "AUTHORS" section]
+.\" Generator: DocBook XSL Stylesheets v1.77.1 <http://docbook.sf.net/>
+.\"      Date: 10/10/2012
+.\"    Manual: \ \&
+.\"    Source: \ \&
+.\"  Language: English
+.\"
+.TH "RC\&.CONF" "5" "10/10/2012" "\ \&" "\ \&"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+rc.conf \- Arch Linux main configuration file
+.SH "SYNOPSIS"
+.sp
+/etc/rc\&.conf
+.SH "DESCRIPTION"
+.sp
+The /etc/rc\&.conf file is the system configuration file for Arch\-specific settings\&. The format is bash\&. It contains several commonly\-edited settings such as timezone; keymap; kernel modules; daemons to load at start\-up; etc\&. It is split up in a few sections to categorize configuration settings: localization, hardware, networking and daemons\&.
+.SH "LOCALIZATION"
+.sp
+\fBTIMEZONE=\fR
+.sp
+Specifies the timezone\&. The setting takes effect on boot by ensuring that /etc/localtime is a symlink to the correct zoneinfo file\&. Possible timezones are the relative path to a zoneinfo file starting from the directory /usr/share/zoneinfo\&. For example, a German timezone would be Europe/Berlin, which refers to the file /usr/share/zoneinfo/Europe/Berlin\&.
+.sp
+Note: if empty, /etc/localtime is not changed\&. This is useful if /etc/localtime is maintained manually or by a third\-party tool; or if there is no reason to change it from what was set during install\&.
+.sp
+Default: empty
+.sp
+\fBHARDWARECLOCK=\fR
+.sp
+How to interpret/update the hardware clock\&. (used by hwclock)
+.sp
+Options:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+empty: fall back to the value in /var/lib/hwclock/adjtime, which defaults to UTC\&. This is recommended as other users of hwclock might change the adjtime file and hence cause rc\&.conf and adjtime to be out of sync\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+"UTC": most robust, allows operating systems to abstract local time and ease DST\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+"localtime": apply timezone (and DST) in hardwareclock: discouraged\&. Choose this if you dualboot with an OS which cannot handle UTC BIOS times correctly, like Windows (note that recent Windows\(cqes can use UTC, which is preferable)\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+any other value will result in the hardware clock being left untouched (useful for virtualization)
+.RE
+.sp
+Default: empty
+.sp
+\fBKEYMAP=\fR
+.sp
+Defines the keymap to load with the loadkeys program on boot\&. Possible keymaps are found in /usr/share/kbd/keymaps\&. Please note that this setting is only valid for your TTYs, not any graphical window managers or X\&. KEYMAP in /etc/vconsole\&.conf takes precedence\&.
+.sp
+Default: empty
+.sp
+\fBCONSOLEFONT=\fR
+.sp
+Defines the console font to load with the setfont program on boot\&. Possible fonts are found in /usr/share/kbd/consolefonts (only needed for non\-US)\&. FONT in /etc/vconsole\&.conf takes precedence\&.
+.sp
+Default: empty
+.sp
+\fBCONSOLEMAP=\fR
+.sp
+Defines the console map to load with the setfont program on boot\&. Possible maps are found in /usr/share/kbd/consoletrans\&. Set this to a map suitable for the appropriate locale (8859\-1 for Latin1, for example) if you\(cqre using an UTF\-8 locale and use programs that generate 8\-bit output\&. If you\(cqre using X11 for everyday work, don\(cqt bother, as it only affects the output of Linux console applications\&. FONT_MAP in /etc/vconsole\&.conf takes precedence\&.
+.sp
+Default: empty
+.sp
+\fBLOCALE=\fR
+.sp
+This sets your system language, which will be used by all i18n\-friendly applications and utilities\&. See locale \-a (or locale\&.gen) for available options\&. LANG in /etc/locale\&.conf takes precedence\&. If unset, it falls back to the C locale\&.
+.sp
+Default: empty
+.sp
+\fBDAEMON_LOCALE=\fR
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+If set to
+\fIyes\fR, use $LOCALE as the locale during daemon startup and during the boot process\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+If set to
+\fIno\fR, the C locale is used\&.
+.RE
+.sp
+Default: "yes"
+.sp
+\fBUSECOLOR=\fR
+.sp
+Use ANSI color sequences in startup messages
+.sp
+Default: "yes"
+.SH "HARDWARE"
+.sp
+\fBMODULES=\fR
+.sp
+Modules to load at boot\-up\&. To blacklist modules, see "man modprobe\&.d"\&.
+.sp
+Default: ()\&.
+.sp
+\fBUSEDMRAID=\fR
+.sp
+Scan for FakeRAID (dmraid) Volumes at startup\&.
+.sp
+Default: "no"
+.sp
+\fBUSEBTRFS=\fR
+.sp
+Scan for BTRFS volumes at startup\&.
+.sp
+Default: "no"
+.sp
+\fBUSELVM=\fR
+.sp
+Scan for LVM volume groups at startup, required if you use LVM\&.
+.sp
+Default: "no"
+.SH "NETWORKING"
+.sp
+\fBHOSTNAME=\fR
+.sp
+Hostname of machine\&. Should also be put in /etc/hosts\&. The contents of /etc/hostname (if not empty) takes precedence\&.
+.sp
+Default: empty
+.sp
+The following settings help you setting up a wired network\&.
+.sp
+\fBinterface=\fR
+.sp
+Name of device\&. Use \fIip addr\fR or \fIls /sys/class/net/\fR to see all available interfaces\&.
+.sp
+Default: empty
+.sp
+Required for manual configuration as well as DHCP\&.
+.sp
+\fBaddress=\fR
+.sp
+IP address\&.
+.sp
+Default: empty
+.sp
+Required for manual configuration, empty for DHCP\&.
+.sp
+\fBnetmask=\fR
+.sp
+Subnet mask\&.
+.sp
+Default: empty (which means 255\&.255\&.255\&.0)
+.sp
+Optional for manual configuration, ignored for DHCP\&.
+.sp
+\fBbroadcast=\fR
+.sp
+Broadcast address\&.
+.sp
+Default: empty
+.sp
+Optional for manual configuration, ignored for DHCP\&.
+.sp
+\fBgateway=\fR
+.sp
+Default route\&.
+.sp
+Default: empty
+.sp
+Required for manual configuration, ignored for DHCP\&.
+.sp
+\fBStatic IP example\fR
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+interface=eth0
+address=192\&.168\&.0\&.2
+netmask=255\&.255\&.255\&.0
+broadcast=192\&.168\&.0\&.255
+gateway=192\&.168\&.0\&.1
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+\fBDHCP example\fR
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+interface=eth0
+address=
+netmask=
+gateway=
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+The following options might be needed for advanced use\-cases\&.
+.sp
+\fBNETWORK_PERSIST=\fR
+.sp
+Setting this to "yes" will skip network shutdown\&. This is required if your root device is on NFS\&.
+.sp
+Default: "no"
+.sp
+\fBNETWORKS=\fR
+.sp
+This functionality is deprecated, please refer to the \fInetcfg\fR documentation\&.
+.SH "DAEMONS"
+.sp
+\fBDAEMONS=\fR
+.sp
+Daemons to start at boot\-up (in this order) \- prefix a daemon with a ! to disable it \- prefix a daemon with a @ to start it up in the background
+.sp
+If you are sure nothing else touches your hardware clock (such as ntpd or a dual\-boot), you might want to enable \fIhwclock\fR\&. Note that this will only make a difference if the hwclock program has been calibrated correctly\&.
+.sp
+If you use a network filesystem you should enable \fInetfs\fR\&.
+.sp
+Default: (syslog\-ng network crond)
+.SH "AUTHORS"
+.sp
+Written by Dieter Plaetinck, Tom Gundersen and others\&.

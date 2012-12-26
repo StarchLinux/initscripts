@@ -1,0 +1,52 @@
+'\" t
+.\"     Title: locale.conf
+.\"    Author: [see the "AUTHORS" section]
+.\" Generator: DocBook XSL Stylesheets v1.77.1 <http://docbook.sf.net/>
+.\"      Date: 10/10/2012
+.\"    Manual: \ \&
+.\"    Source: \ \&
+.\"  Language: English
+.\"
+.TH "LOCALE\&.CONF" "5" "10/10/2012" "\ \&" "\ \&"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+locale.conf \- configuration file for locale settings
+.SH "SYNOPSIS"
+.sp
+\fB/etc/locale\&.conf\fR
+.SH "DESCRIPTION"
+.sp
+The /etc/locale\&.conf file configures system\-wide locale settings\&.
+.sp
+The basic file format of locale\&.conf is a newline\-separated list of environment\-like shell\-compatible variable assignments\&. It is possible to source the configuration from shell scripts, however, beyond mere variable assignments no shell features are supported, allowing applications to read the file without implementing a shell compatible execution engine\&.
+.sp
+The locale settings configured in /etc/locale\&.conf are system\-wide and are inherited by every service or user, unless overridden or unset by individual programs or individual users\&. To avoid services inheriting the locale settings on sysvinit systems, the DAEMON_LOCALE variable in rc\&.conf can be set to "no"\&.
+.sp
+In Arch /etc/rc\&.conf is checked for locale configuration as well, however only as fallback\&.
+.SH "OPTIONS"
+.sp
+The following locale settings may be set using /etc/locale\&.conf: \fBLANG=\fR, \fBLANGUAGE=\fR, \fBLC_CTYPE=\fR, \fBLC_NUMERIC=\fR, \fBLC_TIME=\fR, \fBLC_COLLATE=\fR, \fBLC_MONETARY=\fR, \fBLC_MESSAGES=\fR, \fBLC_PAPER=\fR, \fBLC_NAME=\fR, \fBLC_ADDRESS=\fR, \fBLC_TELEPHONE=\fR, \fBLC_MEASUREMENT=\fR, \fBLC_IDENTIFICATION=\fR\&. Note that \fBLC_ALL\fR may not be be configured in this file\&. For details about the meaning and semantics of these settings, refer to locale(7)\&. The LANG variable overrides LOCALE from /etc/rc\&.conf\&.
+.SH "SEE ALSO"
+.sp
+systemd\&.locale\&.conf(5), locale(7), rc\&.conf(5)
+.SH "AUTHORS"
+.sp
+Original by Lennart Poettering, adapted to Arch Linux by Tom Gundersen\&.

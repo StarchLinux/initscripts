@@ -1,0 +1,90 @@
+'\" t
+.\"     Title: vconsole.conf
+.\"    Author: [see the "AUTHORS" section]
+.\" Generator: DocBook XSL Stylesheets v1.77.1 <http://docbook.sf.net/>
+.\"      Date: 10/10/2012
+.\"    Manual: \ \&
+.\"    Source: \ \&
+.\"  Language: English
+.\"
+.TH "VCONSOLE\&.CONF" "5" "10/10/2012" "\ \&" "\ \&"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+vconsole.conf \- configuration file for the virtual console
+.SH "SYNOPSIS"
+.sp
+\fB/etc/vconsole\&.conf\fR
+.SH "DESCRIPTION"
+.sp
+The /etc/vconsole\&.conf file configures the virtual console, i\&.e\&. keyboard mapping and console font\&.
+.sp
+The basic file format of the vconsole\&.conf is a newline\-separated list environment\-like shell\-compatible variable assignments\&. It is possible to source the configuration from shell scripts, however, beyond mere variable assignments no shell features are supported, allowing applications to read the file without implementing a shell compatible execution engine\&.
+.sp
+In Arch /etc/rc\&.conf is checked for vconsole configuration as well as described below, however only as fallback\&.
+.SH "OPTIONS"
+.sp
+The following options are understood:
+.sp
+\fBKEYMAP=\fR
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Configures the key mapping table of for they keyboard\&. Overriding KEYMAP from rc\&.conf\&.
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+\fBFONT=\fR, \fBFONT_MAP=\fR
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Configures the console font and the console map\&. Overriding respectively CONSOLEFONT and CONSOLEMAP from rc\&.conf\&.
+.fi
+.if n \{\
+.RE
+.\}
+.SH "EXAMPLE"
+.sp
+\fBExample 1\&. German keyboard and console\fR
+.sp
+/etc/vconsole\&.conf:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+KEYMAP=de\-latin1
+FONT=latarcyrheb\-sun16
+.fi
+.if n \{\
+.RE
+.\}
+.SH "SEE ALSO"
+.sp
+systemd\&.vconsole\&.conf(5), loadkeys(1), setfont(8), rc\&.conf(5)
+.SH "AUTHORS"
+.sp
+Original by Lennart Poettering, adapted to Arch Linux by Tom Gundersen\&.
