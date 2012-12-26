@@ -32,16 +32,16 @@ installdirs:
 	install -dm755 $(foreach DIR, $(DIRS), $(DESTDIR)$(DIR))
 
 install: installdirs doc
-	install -m644 -t $(DESTDIR)/etc inittab rc.conf
-	install -m755 -t $(DESTDIR)/etc rc.local rc.local.shutdown rc.multi rc.shutdown rc.single rc.sysinit
-	install -m644 -t $(DESTDIR)/etc/logrotate.d bootlog
-	install -m644 -t $(DESTDIR)/etc/rc.d functions
-	install -m755 -t $(DESTDIR)/etc/rc.d hwclock network netfs
-	install -m755 -t $(DESTDIR)/etc/profile.d locale.sh
-	install -m755 -t $(DESTDIR)/usr/sbin rc.d
-	install -m644 -t $(DESTDIR)/usr/share/man/man5 $(filter %.5, $(MAN_PAGES))
-	install -m644 -t $(DESTDIR)/usr/share/man/man8 $(filter %.8, $(MAN_PAGES))
-	install -m755 -t $(DESTDIR)/usr/lib/initscripts arch-tmpfiles arch-sysctl arch-binfmt
+	install -m644 inittab rc.conf $(DESTDIR)/etc/
+	install -m755 rc.local rc.local.shutdown rc.multi rc.shutdown rc.single rc.sysinit $(DESTDIR)/etc/
+	install -m644 bootlog $(DESTDIR)/etc/logrotate.d/
+	install -m644 functions $(DESTDIR)/etc/rc.d/
+	install -m755 hwclock network netfs $(DESTDIR)/etc/rc.d/
+	install -m755 locale.sh $(DESTDIR)/etc/profile.d/
+	install -m755 rc.d $(DESTDIR)/usr/sbin/
+	install -m644 $$(ls $(MAN_PAGES) | grep '\.5$$') $(DESTDIR)/usr/share/man/man5/
+	install -m644 $$(ls $(MAN_PAGES) | grep '\.8$$') $(DESTDIR)/usr/share/man/man8/
+	install -m755 arch-tmpfiles arch-sysctl arch-binfmt $(DESTDIR)/usr/lib/initscripts/
 	install -m644 tmpfiles.conf $(DESTDIR)/usr/lib/tmpfiles.d/arch.conf
 	install -m644 -T bash-completion $(DESTDIR)/usr/share/bash-completion/completions/rc.d
 	install -m644 -T zsh-completion $(DESTDIR)/usr/share/zsh/site-functions/_rc.d
